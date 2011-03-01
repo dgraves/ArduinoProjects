@@ -6,18 +6,18 @@
 // Octaves 5, 6, and 7 are computed from these values
 static const uint16_t FREQ[13] = {
   0,
-  26163,      // Frequencies for four octaves for C
-  27718,      // Frequencies for four octaves for C# / Db
-  29366,      // Frequencies for four octaves for D
-  31113,      // Frequencies for four octaves for D# / Eb
-  32963,      // Frequencies for four octaves for E / Fb 
-  34923,      // Frequencies for four octaves for F / E#
-  36999,      // Frequencies for four octaves for F# / Gb
-  39200,      // Frequencies for four octaves for G
-  41530,      // Frequencies for four octaves for G# / Ab
-  44000,      // Frequencies for four octaves for A * 100
-  46616,      // Frequencies for four octaves for A# / Bb * 100
-  49388,      // Frequencies for four octaves for B / Cb
+  262,      // Frequencies for four octaves for C
+  277,      // Frequencies for four octaves for C# / Db
+  294,      // Frequencies for four octaves for D
+  311,      // Frequencies for four octaves for D# / Eb
+  330,      // Frequencies for four octaves for E / Fb 
+  349,      // Frequencies for four octaves for F / E#
+  370,      // Frequencies for four octaves for F# / Gb
+  392,      // Frequencies for four octaves for G
+  415,      // Frequencies for four octaves for G# / Ab
+  440,      // Frequencies for four octaves for A * 100
+  466,      // Frequencies for four octaves for A# / Bb * 100
+  494,      // Frequencies for four octaves for B / Cb
 };
 
 const uint8_t NUM_FREQS = 13;
@@ -288,8 +288,8 @@ static bool nextNote(Note* next) {
     // Scales are: A4 = 440Hz, A5 = 880Hz, A6 = 1.76kHz, A7 = 3.52kHz
     // Our freq table starts with A = 220Hz, so we multiply by the appropriate
     // power of 2 (A4 -> 2, A5 -> 4, A6 -> 8, A7 -> 16
-    uint32_t frequency = ((uint32_t)FREQ[note]) * (1 << (scale - BASE_FREQ_SCALE));
-    next->setFrequency(frequency/100);
+    uint16_t frequency = ((uint32_t)FREQ[note]) * (1 << (scale - BASE_FREQ_SCALE));
+    next->setFrequency(frequency);
 
     // Get number of milliseconds per note
     // (1 minute * (60000 milliseconds/minute)) / (tempo beats * (1 note/ 4 beats))
