@@ -6,13 +6,24 @@
 #include "Note.h"
 #include "Ringtone.h"
 
-typedef void (*PlayNoteNotification)(const Note&);
+typedef void (*PlayNoteCallback)(const Note&);
 
-class RingtonePlayer {
+class RingtonePlayerClass {
 public:
-  RingtonePlayer();
+  RingtonePlayerClass();
 
-  ~RingtonePlayer();
+  ~RingtonePlayerClass();
+
+  void begin(uint8_t speakerPin);
+
+  bool isPlaying() const;
+
+  void play();
+
+  void stop();
+
+  // Specify a callback to receive notification when a note is played
+  void setPlayNoteCallback(PlayNoteCallback callback);
 
   // Number of built-in ringtones.
   uint16_t numRingtones() const;
@@ -32,22 +43,18 @@ public:
   // Set the current ringtone to the ringtone stored in EEPROM.
   void selectUserRingtone();
 
-  String ringtoneName() const;
+  // Name of currently selectd ringtone
+  const String& ringtoneName() const;
 
-  bool isPlaying() const;
-
-  void play(uint8_t speakerPin);
-
-  void stop();
-
-  static void test(uint8_t speakerPin, uint8_t numScales);  // Valid numScale values are 1 through 5
+  // Retrieve the ringtone
+  const Ringtone& ringtone() const;
 
 private:
   Ringtone _ringtone;    // Access to our ringtones
-  uint16_t _currentPos;  // Current position in the ring tone string
   uint8_t  _pin;
-  int8_t   _timer;
 };
+
+extern RingtonePlayerClass RingtonePlayer;
 
 #endif
 

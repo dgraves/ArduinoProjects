@@ -3,8 +3,6 @@
 #include "Ringtone.h"
 #include "ringtones.h"
 
-#define DEBUG
-
 const uint8_t DEFAULT_DURATION = 4;
 const uint8_t DEFAULT_SCALE = 6;
 const uint8_t DEFAULT_BPM = 63;
@@ -32,7 +30,7 @@ uint8_t Ringtone::scale() const {
   return _scale;
 }
 
-uint8_t Ringtone::bpm() const {
+uint16_t Ringtone::bpm() const {
   return _bpm;
 }
 
@@ -40,7 +38,7 @@ uint16_t Ringtone::length() const {
   return _length;
 }
 
-char Ringtone::value(uint16_t index) {
+char Ringtone::value(uint16_t index) const {
   if (index >= _length) {
     //  Return null character when index exceeds data size
     return '\0';
@@ -84,11 +82,12 @@ bool Ringtone::isUserSelected() const {
 bool Ringtone::hasUser() const {
   // Check eeprom for an entry
   // Byte at 0 index will be 0xFF if not ringtone exists
-  uint8_t value = EEPROM.read(0);
-  if (value == 0xFF) {
-    return false;
-  } else {
+  if (EEPROM.read(0) == 'R' && EEPROM.read(1) == 'I' &&
+      EEPROM.read(2) == 'N' && EEPROM.read(3) == 'G' &&
+      EEPROM.read(4) == ':') {
     return true;
+  } else {
+    return false;
   }
 }
   
@@ -278,17 +277,17 @@ void Ringtone::loadUser() {
     clear();
   } else {
     // Read the length of the ringtone string
-    uint16_t length = EEPROM.read(1);
+    uint16_t length = EEPROM.read(5);
     length <<= 8;
-    length |= EEPROM.read(2);
+    length |= EEPROM.read(6);
     
     if (length == 0) {
       clear();
       return;
     }
     
-    uint16_t pos = 3;  // Start of ringtone data (after flag + size)
-    length += 3;       // Full length of EEPROM data (ringtone + flag + size)
+    uint16_t pos = 7;  // Start of ringtone data (after flag + size)
+    length += 7;       // Full length of EEPROM data (ringtone + flag + size)
 
     // Read the name
     char name[11] = {0};

@@ -23,7 +23,7 @@ public:
   uint8_t scale() const;
 
   // Beats per minute control value for current ringtone.  
-  uint8_t bpm() const;
+  uint16_t bpm() const;
 
   // Length of the currently selected ringtone's command data. The reported length only describes
   // the portion of the ringtone string conaining the ringtone command data. The lengths of
@@ -31,7 +31,7 @@ public:
   uint16_t length() const;
 
   // Retrieve the character from ringtone data stored at the specified location.
-  char value(uint16_t index);
+  char value(uint16_t index) const;
 
   // Number of built-in ringtones.
   uint16_t total() const;

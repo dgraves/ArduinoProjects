@@ -1,5 +1,3 @@
-#include <EEPROM.h>
-
 /*
  Ringtone Jukebox
  
@@ -18,9 +16,9 @@
  This code is in the public domain.
  
  http://www.dgraves.org
-
  */
 #include <Bounce.h>
+#include <EEPROM.h>
 #include "RingtonePlayer.h"
 
 /* Label pins with a name describing the associated function.
@@ -34,8 +32,6 @@ const unsigned int SPEAKER_PIN     = 8;
 const unsigned int LED_PIN         = 12;
 
 const unsigned int BAUD_RATE = 9600;
-
-RingtonePlayer player;
 
 void setup() {
   pinMode(PLAY_BUTTON_PIN, INPUT);
@@ -53,8 +49,10 @@ void setup() {
   // after program reset, comment this line.  
   EEPROM.write(0, 0xFF);
 
-  player.selectRingtone(0);
-//  RingtonePlayer::test(SPEAKER_PIN, 1);
+  RingtonePlayer.begin(SPEAKER_PIN);
+  RingtonePlayer.setPlayNoteCallback(playNoteCallback);
+  RingtonePlayer.selectRingtone(0);
+  sendStateChange("Select", RingtonePlayer.ringtoneName());
 }
 
 const unsigned int DEBOUNCE_DELAY = 20;
@@ -66,19 +64,21 @@ void loop() {
   handlePlayButton();
   handleNextButton();
   handlePrevButton();
+  digitalWrite(LED_PIN, digitalRead(SPEAKER_PIN));
+  delay(1);
 }
 
 void handlePlayButton() {
   if (playButton.update()) {
     if (playButton.read() == HIGH) {
       // Play the ringtone; restart if already playing
-      if (player.isPlaying()) {
-        player.stop();
+      if (RingtonePlayer.isPlaying()) {
+        sendStateChange("Stop", RingtonePlayer.ringtoneName());
+        RingtonePlayer.stop();
+      } else {
+        sendStateChange("Play", RingtonePlayer.ringtoneName());
+        RingtonePlayer.play();
       }
-
-      Serial.print("Playing ringtone: ");
-      Serial.println(player.ringtoneName());      
-      player.play(SPEAKER_PIN);
     }
   }
 }
@@ -86,22 +86,34 @@ void handlePlayButton() {
 void handleNextButton() {
   if (nextButton.update()) {
     if (nextButton.read() == HIGH) {
-      if (player.isUserRingtoneSelected()) {
-        player.selectRingtone(0);
+      bool play = false;
+      if (RingtonePlayer.isPlaying()) {
+        play = true;
+        RingtonePlayer.stop();
+      }
+
+      if (RingtonePlayer.isUserRingtoneSelected()) {
+        RingtonePlayer.selectRingtone(0);
       } else {
-        unsigned int current = player.selectedRingtone() + 1;
+        unsigned int current = RingtonePlayer.selectedRingtone() + 1;
         
         // If we have reached the end of the ringtones in the list we select
         // the user ringtone, if specified, or move to start of list
-        if (current == player.numRingtones()) {
-          if (player.hasUserRingtone()) {
-            player.selectUserRingtone();
+        if (current == RingtonePlayer.numRingtones()) {
+          if (RingtonePlayer.hasUserRingtone()) {
+            RingtonePlayer.selectUserRingtone();
           } else {
-            player.selectRingtone(0);
+            RingtonePlayer.selectRingtone(0);
           }
         } else {
-          player.selectRingtone(current);
+          RingtonePlayer.selectRingtone(current);
         }
+      }
+
+      sendStateChange("Select", RingtonePlayer.ringtoneName());
+
+      if (play) {
+        RingtonePlayer.play();
       }
     }
   }
@@ -110,21 +122,53 @@ void handleNextButton() {
 void handlePrevButton() {
   if (prevButton.update()) {
     if (prevButton.read() == HIGH) {
-      if (player.isUserRingtoneSelected()) {
-        player.selectRingtone(player.numRingtones() - 1);
+      bool play = false;
+      if (RingtonePlayer.isPlaying()) {
+        play = true;
+        RingtonePlayer.stop();
+      }
+
+      if (RingtonePlayer.isUserRingtoneSelected()) {
+        RingtonePlayer.selectRingtone(RingtonePlayer.numRingtones() - 1);
       } else {
-        unsigned int current = player.selectedRingtone();
+        unsigned int current = RingtonePlayer.selectedRingtone();
         if (current == 0) {
-          if (player.hasUserRingtone()) {
-            player.selectUserRingtone();
+          if (RingtonePlayer.hasUserRingtone()) {
+            RingtonePlayer.selectUserRingtone();
           } else {
-            player.selectRingtone(player.numRingtones() - 1);
+            RingtonePlayer.selectRingtone(RingtonePlayer.numRingtones() - 1);
           }
         } else {
-          player.selectRingtone(current - 1);
+          RingtonePlayer.selectRingtone(current - 1);
         }
+      }
+
+      sendStateChange("Select", RingtonePlayer.ringtoneName());
+
+      if (play) {
+        RingtonePlayer.play();
       }
     }
   }
+}
+
+void playNoteCallback(const Note& note) {
+  Serial.print("{");
+  Serial.print("PlayNote");
+  Serial.print(",");
+  Serial.print(note.frequency());
+  Serial.print(",");
+  Serial.print(note.duration());
+  Serial.println("}");
+}
+
+// Send a state change indicator to the display software
+// Formatted as {<action>, <value>}
+void sendStateChange(const String& action, const String& value) {
+  Serial.print("{");
+  Serial.print(action);
+  Serial.print(",");
+  Serial.print(value);
+  Serial.println("}");
 }
 
