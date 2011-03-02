@@ -65,7 +65,6 @@ void loop() {
   handleNextButton();
   handlePrevButton();
   digitalWrite(LED_PIN, digitalRead(SPEAKER_PIN));
-  delay(1);
 }
 
 void handlePlayButton() {

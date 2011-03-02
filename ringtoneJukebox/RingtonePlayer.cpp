@@ -46,7 +46,8 @@ const uint8_t MAX_TONE_COMMAND_LEN = 6;
 
 // Timer setup for tone generation.  This code is based on the Arduino tone() implementation,
 // and has been modified to play a series of tones, instead of a single tone.
-volatile long timerToggleCount;
+volatile uint32_t timerToggleCount;
+volatile bool timerPause;
 volatile uint8_t *timerPinPort;
 volatile uint8_t timerPinMask;
 volatile uint8_t timerPin = 8;
@@ -63,14 +64,21 @@ static void timerSetup(uint8_t pin) {
 }
 
 static bool timerStart(uint16_t frequency, uint32_t duration) {
-  uint8_t prescalarbits = 0b001;
-  uint32_t ocr = F_CPU / frequency / 2 - 1;
-  long toggleCount = 0;
-
   // Set the pinMode as OUTPUT
   pinMode(timerPin, OUTPUT);
 
-  // Determine scale value; probably a better way to do this
+  // Handle pause with timer
+  if (frequency == 0) {
+    frequency = 1000;     // 1 millisecond; timer will count duration for a pause
+    timerPause = true;
+  } else {
+    timerPause = false;
+  }
+
+  uint32_t ocr = F_CPU / frequency / 2 - 1;
+  uint8_t prescalarbits = 0b001;
+
+  // Determine scale value
   if (ocr > 255) {
     ocr = F_CPU / frequency / 2 / 8 - 1;
     prescalarbits = 0b010;
@@ -101,11 +109,7 @@ static bool timerStart(uint16_t frequency, uint32_t duration) {
     }
   }
 
-  if (duration > 0) {
-    timerToggleCount = 2 * frequency * duration / 1000;
-  } else {
-    timerToggleCount = -1;
-  }
+  timerToggleCount = 2 * frequency * duration / 1000;
 
   TCCR2B = prescalarbits;
   OCR2A = ocr;
@@ -287,7 +291,7 @@ static bool nextNote(Note* next) {
     // Compute the frequency
     // Scales are: A4 = 440Hz, A5 = 880Hz, A6 = 1.76kHz, A7 = 3.52kHz
     // Our freq table starts with A = 220Hz, so we multiply by the appropriate
-    // power of 2 (A4 -> 2, A5 -> 4, A6 -> 8, A7 -> 16
+    // power of 2 (A4 -> 1, A5 -> 2, A6 -> 4, A7 -> 8
     uint16_t frequency = ((uint32_t)FREQ[note]) * (1 << (scale - BASE_FREQ_SCALE));
     next->setFrequency(frequency);
 
@@ -327,28 +331,11 @@ static bool nextNote(Note* next) {
 static bool playNextNote() {
   Note next;
   if (nextNote(&next)) {
-    // Handle pause
-    while (next.frequency() == 0) {
-      if (playNoteCallback) {
-        playNoteCallback(next);
-      }
-
-      delay(next.duration());
-
-      if (!nextNote(&next)) {
-        break;
-      }
+    if (playNoteCallback) {
+      playNoteCallback(next);
     }
-
-    if (next.frequency() != 0) {
-      if (playNoteCallback) {
-        playNoteCallback(next);
-      }
-
-      timerStart(next.frequency(), next.duration());
-
-      return true;
-    }
+    timerStart(next.frequency(), next.duration());
+    return true;
   }
 
 #ifdef DEBUG
@@ -359,18 +346,19 @@ static bool playNextNote() {
 
 ISR(TIMER2_COMPA_vect)
 {
-  if (timerToggleCount != 0)
+  if (timerToggleCount > 0)
   {
-    *timerPinPort ^= timerPinMask;
-
-    if (timerToggleCount > 0) {
-      timerToggleCount--;
+    if (timerPause) {
+      *timerPinPort &= ~timerPinMask;
+    } else {
+      *timerPinPort ^= timerPinMask;
     }
+
+    timerToggleCount--;
   }
   else
   {
     timerStop();
-    delay(2);     // Pause to let timer stop; needed to distinguish between some notes (same one played in sequence, etc)
     playNextNote();
   }
 }
