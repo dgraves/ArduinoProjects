@@ -31,7 +31,8 @@ const unsigned int PREV_BUTTON_PIN = 7;
 const unsigned int SPEAKER_PIN     = 8;
 const unsigned int LED_PIN         = 12;
 
-const unsigned int BAUD_RATE = 9600;
+const unsigned int BAUD_RATE = 19200;
+const unsigned int MAX_RINGTONE_LENGTH = 500;
 
 void setup() {
   pinMode(PLAY_BUTTON_PIN, INPUT);
@@ -42,13 +43,6 @@ void setup() {
   
   Serial.begin(BAUD_RATE);
   
-  // Reset EEPROM address 0 to 0xFF; this will make it appear that no user
-  // specified ringtone is present.  We do this because the EEPROM is not
-  // cleared when new programs are uploaded, and the EEPROM may contain 
-  // non-ringtone data.  To keep the user specified ringtone in memory
-  // after program reset, comment this line.  
-  EEPROM.write(0, 0xFF);
-
   RingtonePlayer.begin(SPEAKER_PIN);
   RingtonePlayer.setPlayNoteCallback(playNoteCallback);
   RingtonePlayer.selectRingtone(0);
@@ -61,10 +55,107 @@ Bounce nextButton(NEXT_BUTTON_PIN, DEBOUNCE_DELAY);
 Bounce prevButton(PREV_BUTTON_PIN, DEBOUNCE_DELAY);
 
 void loop() {
+  if (Serial.available()) {
+    readRingtone();
+  }
+
   handlePlayButton();
   handleNextButton();
   handlePrevButton();
+
+  // Make the LED pulse with the music
   digitalWrite(LED_PIN, digitalRead(SPEAKER_PIN));
+}
+
+// Wait for data to become available for 60 milliseconds before giving up
+bool dataAvailable() {
+  uint8_t count = 60;
+  while (!Serial.available()) {
+    delay(1);
+    if (--count == 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// Recieve ringtone data from PC. Ringtone data should be formatted as:
+// RING:<size>:<data>
+// Where 'RING' is the "magic number" identifying the data as a ringtone,
+// 'size' is the length of the data, and 'data' is the actual ringtone data
+void readRingtone() {
+  if (readMagicNumber()) {
+    unsigned int length = readLength();
+    if (length > 0 && length <= MAX_RINGTONE_LENGTH) {
+      char data[MAX_RINGTONE_LENGTH];
+      const unsigned int offset = 6;
+      unsigned int count = offset;
+      length += offset;
+      while (dataAvailable() && count < length) {
+        data[count - offset] = Serial.read();
+        ++count;
+      }
+
+      // Make sure all data was received
+      if (count == length) {
+        // Write magic number and size
+        EEPROM.write(0, 'R');
+        EEPROM.write(1, 'I');
+        EEPROM.write(2, 'N');
+        EEPROM.write(3, 'G');
+        EEPROM.write(4, (length >> 8) & 0xFF);
+        EEPROM.write(5, length & 0xFF);
+        
+        for (int i = offset; i < length; ++i) {
+          EEPROM.write(i, data[i - offset]);
+        }
+        
+        // Select the new ringtone
+        RingtonePlayer.selectUserRingtone();
+        sendStateChange("Select", RingtonePlayer.ringtoneName());
+      }
+    }
+  }
+}
+
+// Read the magic number segment. Four characters, RING, followed by ':'
+bool readMagicNumber() {
+  const uint8_t MAX = 5;
+  uint8_t count = 0;
+  const char magic[MAX] = { 'R', 'I', 'N', 'G', ':' };
+
+  while (dataAvailable() && count < MAX) {
+    char next = Serial.read();
+    if (next != magic[count++]) {
+      break;
+    }
+  }
+
+  return (count < MAX) ? false : true;
+}
+
+// Read the length of the data. Sequence of digits followed by ':'
+uint16_t readLength() {
+  // Read until the ':' segment terminator is received
+  // Count should not exceed 6 (5 for max uint16 value and 1 for ':')
+  const uint8_t MAX = 6;
+  uint8_t count = 0;
+  uint16_t length = 0;
+
+  while (dataAvailable() && count < MAX) {
+    char next = Serial.read();
+
+    if (isdigit(next)) {
+      length *= 10;
+      length += next - '0';
+    } else if (next == ':') {
+      return length;
+    } else {
+      return 0;     // Read an unexpected value
+    }
+  }
+
+  return 0;         // Too many digits before ':'
 }
 
 void handlePlayButton() {
@@ -152,13 +243,19 @@ void handlePrevButton() {
 }
 
 void playNoteCallback(const Note& note) {
-  Serial.print("{");
-  Serial.print("PlayNote");
-  Serial.print(",");
-  Serial.print(note.frequency());
-  Serial.print(",");
-  Serial.print(note.duration());
-  Serial.println("}");
+  if (note.id() != 0xFF) {
+    Serial.print("{");
+    Serial.print("Note");
+    Serial.print(",");
+    Serial.print((int)note.id());
+    Serial.print(",");
+    Serial.print(note.frequency());
+    Serial.print(",");
+    Serial.print(note.duration());
+    Serial.println("}");
+  } else {
+    sendStateChange("Stop", RingtonePlayer.ringtoneName());
+  }
 }
 
 // Send a state change indicator to the display software

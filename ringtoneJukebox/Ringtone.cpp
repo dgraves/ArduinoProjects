@@ -83,8 +83,7 @@ bool Ringtone::hasUser() const {
   // Check eeprom for an entry
   // Byte at 0 index will be 0xFF if not ringtone exists
   if (EEPROM.read(0) == 'R' && EEPROM.read(1) == 'I' &&
-      EEPROM.read(2) == 'N' && EEPROM.read(3) == 'G' &&
-      EEPROM.read(4) == ':') {
+      EEPROM.read(2) == 'N' && EEPROM.read(3) == 'G') {
     return true;
   } else {
     return false;
@@ -92,11 +91,9 @@ bool Ringtone::hasUser() const {
 }
   
 void Ringtone::selectUser() {
-  // Only load if the ringtone has changed
-  if (!_userSelected) {
-    _userSelected = true;
-    loadUser();
-  }
+  // Always load the user selected ringtone, in case it has changed
+  _userSelected = true;
+  loadUser();
 }
 
 void Ringtone::clear() {
@@ -217,7 +214,7 @@ void Ringtone::load(uint16_t index) {
       }
       
       // Set the value
-      switch (control) {
+      switch (tolower(control)) {
       case 'd':
         _duration = value;
         break;
@@ -277,17 +274,18 @@ void Ringtone::loadUser() {
     clear();
   } else {
     // Read the length of the ringtone string
-    uint16_t length = EEPROM.read(5);
+    uint16_t length = EEPROM.read(4);
     length <<= 8;
-    length |= EEPROM.read(6);
-    
+    length |= EEPROM.read(5);
+
     if (length == 0) {
       clear();
       return;
     }
     
-    uint16_t pos = 7;  // Start of ringtone data (after flag + size)
-    length += 7;       // Full length of EEPROM data (ringtone + flag + size)
+    const uint8_t offset = 6;
+    uint16_t pos = offset;  // Start of ringtone data (after flag + size)
+    length += offset;       // Full length of EEPROM data (ringtone + flag + size)
 
     // Read the name
     char name[11] = {0};
@@ -303,6 +301,8 @@ void Ringtone::loadUser() {
         clear();
         return;
       }
+      
+      c = EEPROM.read(pos);
     }
     
     _name = name;
@@ -335,7 +335,7 @@ void Ringtone::loadUser() {
       } else {
         // Next character should be '='
         pos = skipWhiteSpaceUser(++pos, length);
-        if (pos == length || pgm_read_byte(pos) != '=') {
+        if (pos == length || EEPROM.read(pos) != '=') {
           clear();
           return;
         }
@@ -348,7 +348,7 @@ void Ringtone::loadUser() {
         }
   
         // Get the value
-        c = pgm_read_byte(pos);
+        c =EEPROM.read(pos);
         if (!isdigit(c)) {
           // Should be a number
           clear();
@@ -383,7 +383,7 @@ void Ringtone::loadUser() {
         }
       
         // Set the value
-        switch (control) {
+        switch (tolower(control)) {
         case 'd':
           _duration = value;
           break;
@@ -423,9 +423,9 @@ void Ringtone::loadUser() {
       clear();
       return;
     }
-    
+
     _startPos = pos;
-    _length = length - pos;
+    _length = length - pos - offset;
 
 #ifdef DEBUG
     Serial.print("Ringtone command data length: ");

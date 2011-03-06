@@ -305,6 +305,9 @@ static bool nextNote(Note* next) {
       next->setDuration(next->duration() * 1.5);
     }
 
+    // Set note id
+    next->setId(note);
+
 #ifdef DEBUG
     Serial.print("Note: ");
     Serial.println((uint16_t)note);
@@ -341,6 +344,11 @@ static bool playNextNote() {
 #ifdef DEBUG
   Serial.println("Ringtone: No more notes");
 #endif
+
+  // Signal that playing stopped
+  next.setId(0xFF);
+  playNoteCallback(next);
+
   return false;
 }
 
