@@ -25,7 +25,7 @@ const String& Ringtone::name() const {
 uint8_t Ringtone::duration() const {
   return _duration;
 }
-  
+
 uint8_t Ringtone::scale() const {
   return _scale;
 }
@@ -43,11 +43,11 @@ char Ringtone::value(uint16_t index) const {
     //  Return null character when index exceeds data size
     return '\0';
   }
-  
+
   if (_userSelected) {
     return EEPROM.read(_startPos + index);
   } else {
-    // Get the address of the current ringtone from the 
+    // Get the address of the current ringtone from the
     return pgm_read_byte(&(_currentRingtoneAddr[_startPos + index]));
   }
 }
@@ -66,7 +66,7 @@ void Ringtone::select(uint16_t index) {
       // Clamp value to largest index in ringtone table
       index = total() - 1;
     }
-  
+
     // Only load if the ringtone has changed
     if (_userSelected || (index != _currentRingtone)) {
       _userSelected = false;
@@ -89,7 +89,7 @@ bool Ringtone::hasUser() const {
     return false;
   }
 }
-  
+
 void Ringtone::selectUser() {
   // Always load the user selected ringtone, in case it has changed
   _userSelected = true;
@@ -131,7 +131,7 @@ void Ringtone::load(uint16_t index) {
     clear();
     return;
   }
-  
+
   // Extract the name
   uint16_t namelen = end - _currentRingtoneAddr;
   char name[11] = {0};
@@ -179,14 +179,14 @@ void Ringtone::load(uint16_t index) {
         clear();
         return;
       }
-      
+
       pos = skipWhiteSpace(++pos, end);
       if (pos == end) {
         // Reaching end in the middle of control-pair expression is an error
         clear();
         return;
       }
-  
+
       // Get the value
       char c = pgm_read_byte(pos);
       if (!isdigit(c)) {
@@ -194,7 +194,7 @@ void Ringtone::load(uint16_t index) {
         clear();
         return;
       }
-      
+
       // No need to check pos < end because end is the non-digit ':'
       uint16_t value = 0;
       while (isdigit(c)) {
@@ -205,14 +205,14 @@ void Ringtone::load(uint16_t index) {
 
       // Move on to next token
       pos = skipWhiteSpace(pos, end);
-      
+
       // Should be ',' or ':'
       c = pgm_read_byte(pos);
       if (c != ',' && c != ':') {
         clear();
         return;
       }
-      
+
       // Set the value
       switch (tolower(control)) {
       case 'd':
@@ -226,7 +226,7 @@ void Ringtone::load(uint16_t index) {
         break;
       }
     }
-    
+
     // Move past ','
     if (pos < end) {
       pos = skipWhiteSpace(++pos, end);
@@ -258,7 +258,7 @@ void Ringtone::load(uint16_t index) {
   Serial.println(_startPos);
 #endif
 }
-  
+
 static uint16_t skipWhiteSpaceUser(uint16_t pos, uint16_t len) {
   while(pos < len) {
     if(!isspace(EEPROM.read(pos))) {
@@ -282,7 +282,7 @@ void Ringtone::loadUser() {
       clear();
       return;
     }
-    
+
     const uint8_t offset = 6;
     uint16_t pos = offset;  // Start of ringtone data (after flag + size)
     length += offset;       // Full length of EEPROM data (ringtone + flag + size)
@@ -295,16 +295,16 @@ void Ringtone::loadUser() {
       if (index < 10) {
         name[index++] = c;
       }
-      
+
       if (++pos == length) {
         // Reaching end of ringtone string while reading name is an error
         clear();
         return;
       }
-      
+
       c = EEPROM.read(pos);
     }
-    
+
     _name = name;
 
 #ifdef DEBUG
@@ -339,14 +339,14 @@ void Ringtone::loadUser() {
           clear();
           return;
         }
-        
+
         pos = skipWhiteSpaceUser(++pos, length);
         if (pos == length) {
           // Reaching end in the middle of control-pair expression is an error
           clear();
           return;
         }
-  
+
         // Get the value
         c =EEPROM.read(pos);
         if (!isdigit(c)) {
@@ -374,14 +374,14 @@ void Ringtone::loadUser() {
           clear();
           return;
         }
-      
+
         // Should be ',' or ':'
         c = EEPROM.read(pos);
         if (c != ',' && c != ':') {
           clear();
           return;
         }
-      
+
         // Set the value
         switch (tolower(control)) {
         case 'd':
@@ -395,7 +395,7 @@ void Ringtone::loadUser() {
           break;
         }
       }
-    
+
       // Move past ','
       if (c == ',') {
         pos = skipWhiteSpaceUser(++pos, length);

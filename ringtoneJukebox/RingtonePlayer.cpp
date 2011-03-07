@@ -10,7 +10,7 @@ static const uint16_t FREQ[13] = {
   277,      // Frequencies for four octaves for C# / Db
   294,      // Frequencies for four octaves for D
   311,      // Frequencies for four octaves for D# / Eb
-  330,      // Frequencies for four octaves for E / Fb 
+  330,      // Frequencies for four octaves for E / Fb
   349,      // Frequencies for four octaves for F / E#
   370,      // Frequencies for four octaves for F# / Gb
   392,      // Frequencies for four octaves for G
@@ -418,7 +418,7 @@ uint16_t RingtonePlayerClass::selectedRingtone() const {
 void RingtonePlayerClass::selectRingtone(uint16_t index) {
   _ringtone.select(index);
 }
-  
+
 // Determine if user specified ring tone is selected.
 bool RingtonePlayerClass::isUserRingtoneSelected() const {
   return _ringtone.isUserSelected();
@@ -428,7 +428,7 @@ bool RingtonePlayerClass::isUserRingtoneSelected() const {
 bool RingtonePlayerClass::hasUserRingtone() const {
   return _ringtone.hasUser();
 }
-  
+
 // Set the current ringtone to the ringtone stored in EEPROM.
 void RingtonePlayerClass::selectUserRingtone() {
   _ringtone.selectUser();

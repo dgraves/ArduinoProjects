@@ -4,25 +4,25 @@
 #include <stdint.h>
 #include <WString.h>
 
-// Facade providing access to both the built-in ring tones stored in program 
+// Facade providing access to both the built-in ring tones stored in program
 // memory and a user specified ringtone stored in EEPROM
 class Ringtone {
 public:
   Ringtone();
-  
+
   void init();
-  
-  // Retrieves the name of the ringtone. The ringtone's name is found at the 
+
+  // Retrieves the name of the ringtone. The ringtone's name is found at the
   // start of the ringtone string, followed by the ':' character.
   const String& name() const;
 
   // Duration control value for current ringtone.
   uint8_t duration() const;
-  
+
   // Scale control value for current ringtone.
   uint8_t scale() const;
 
-  // Beats per minute control value for current ringtone.  
+  // Beats per minute control value for current ringtone.
   uint16_t bpm() const;
 
   // Length of the currently selected ringtone's command data. The reported length only describes
@@ -35,8 +35,8 @@ public:
 
   // Number of built-in ringtones.
   uint16_t total() const;
-  
-  // Currently selected ringtone. Returns 0xFF if no selection has been made. 
+
+  // Currently selected ringtone. Returns 0xFF if no selection has been made.
   uint16_t selected() const;
 
   // Set the current ringtone to the built-in ringtone specified.
@@ -47,7 +47,7 @@ public:
 
   // Check for presence of a user specified ringtone in EEPROM.
   bool hasUser() const;
-  
+
   // Set the current ringtone to the ringtone stored in EEPROM.
   void selectUser();
 

@@ -44,7 +44,7 @@ PROGMEM const char* RINGTONES[] = {
   tone_12,
   tone_13,
   tone_14,
-  tone_15, 
+  tone_15,
 };
 
 const uint16_t NUM_RINGTONES = 16;

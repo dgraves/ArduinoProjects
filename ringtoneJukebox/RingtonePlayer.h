@@ -28,18 +28,18 @@ public:
   // Number of built-in ringtones.
   uint16_t numRingtones() const;
 
-  // Currently selected ringtone. Returns 0xFF if no selection has been made. 
+  // Currently selected ringtone. Returns 0xFF if no selection has been made.
   uint16_t selectedRingtone() const;
 
   // Select one of the built-in ringtones
   void selectRingtone(uint16_t index);
-  
+
   // Determine if user specified ring tone is selected.
   bool isUserRingtoneSelected() const;
 
   // Check for presence of a user specified ringtone in EEPROM.
   bool hasUserRingtone() const;
-  
+
   // Set the current ringtone to the ringtone stored in EEPROM.
   void selectUserRingtone();
 

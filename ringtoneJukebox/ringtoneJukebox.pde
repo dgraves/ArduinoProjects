@@ -1,20 +1,20 @@
 /*
  Ringtone Jukebox
- 
- Plays ringtones 
- 
+
+ Plays ringtones
+
  circuit:
  * 8-ohm speaker on digital pin 8 with 100 Ohm resistor
  * Button on pin 0 for tune selection (select next) with 10K pulldown resistor
  * Button on pin 1 for tune selection (select previous) with 10K pulldown resistor
  * Button on pin 9 to play the tune (ProtoShield button with 10K pulldown resistor)
  * LED on pin 12 to blink tune (ProtoShield LED with 330 resistor)
- 
+
  created 21 Feb 2011
  by Dustin Graves
 
  This code is in the public domain.
- 
+
  http://www.dgraves.org
  */
 #include <Bounce.h>
@@ -40,9 +40,9 @@ void setup() {
   pinMode(PREV_BUTTON_PIN, INPUT);
   pinMode(SPEAKER_PIN, OUTPUT);
   pinMode(LED_PIN, OUTPUT);
-  
+
   Serial.begin(BAUD_RATE);
-  
+
   RingtonePlayer.begin(SPEAKER_PIN);
   RingtonePlayer.setPlayNoteCallback(playNoteCallback);
   RingtonePlayer.selectRingtone(0);
@@ -105,11 +105,11 @@ void readRingtone() {
         EEPROM.write(3, 'G');
         EEPROM.write(4, (length >> 8) & 0xFF);
         EEPROM.write(5, length & 0xFF);
-        
+
         for (int i = offset; i < length; ++i) {
           EEPROM.write(i, data[i - offset]);
         }
-        
+
         // Select the new ringtone
         RingtonePlayer.selectUserRingtone();
         sendStateChange("Select", RingtonePlayer.ringtoneName());
@@ -186,7 +186,7 @@ void handleNextButton() {
         RingtonePlayer.selectRingtone(0);
       } else {
         unsigned int current = RingtonePlayer.selectedRingtone() + 1;
-        
+
         // If we have reached the end of the ringtones in the list we select
         // the user ringtone, if specified, or move to start of list
         if (current == RingtonePlayer.numRingtones()) {

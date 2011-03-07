@@ -18,7 +18,7 @@ public:
   void setId(uint8_t id) { _id = id; }
 
   void setFrequency(uint16_t frequency) { _frequency = frequency; }
-  
+
   void setDuration(uint32_t duration) { _duration = duration; }
 
 private:
