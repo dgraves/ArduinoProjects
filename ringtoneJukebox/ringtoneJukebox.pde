@@ -4,11 +4,11 @@
  Plays ringtones
 
  circuit:
+ * Button on pin 5 to play the tune (ProtoShield button with 10K pulldown resistor)
+ * Button on pin 6 for tune selection (select next) with 10K pulldown resistor
+ * Button on pin 7 for tune selection (select previous) with 10K pulldown resistor
  * 8-ohm speaker on digital pin 8 with 100 Ohm resistor
- * Button on pin 0 for tune selection (select next) with 10K pulldown resistor
- * Button on pin 1 for tune selection (select previous) with 10K pulldown resistor
- * Button on pin 9 to play the tune (ProtoShield button with 10K pulldown resistor)
- * LED on pin 12 to blink tune (ProtoShield LED with 330 resistor)
+ * LED on pin 12 to blink tune (ProtoShield LED with 330 Ohm resistor)
 
  created 21 Feb 2011
  by Dustin Graves
