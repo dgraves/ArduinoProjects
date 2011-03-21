@@ -1,3 +1,16 @@
+/*
+ Ringtone Visualizer
+
+ For visualizing notes from ringtones played by the Arduino Ringtone
+ Jukebox project.
+
+ created 1 Mar 2011
+ by Dustin Graves
+
+ This code is licensed with the MIT License.
+
+ http://www.dgraves.org
+ */
 import javax.swing.JOptionPane;
 import processing.serial.*;
 import processing.video.*;

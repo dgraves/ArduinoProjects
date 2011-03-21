@@ -13,7 +13,7 @@
  created 21 Feb 2011
  by Dustin Graves
 
- This code is in the public domain.
+ This code is licensed with the MIT License.
 
  http://www.dgraves.org
  */
