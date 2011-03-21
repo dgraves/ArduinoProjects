@@ -8,7 +8,7 @@
 // Ringtones are represented with the RTTTL format: http://merwin.bespin.org/t4a/specs/nokia_rtttl.txt
 
 // Themes
-const char tone_0[] PROGMEM  = "McGyver:d=8,o=5,b=160:c6,c6,c6,c6,c6,c6,c6,c6,2b,f#,4a,2g,p,c6,4c6,4b,a,b,a,4g,4e6,2a,c6,4c6,2b,p,f#,4a,2g,p,c6,4c6,4b,a,b,a,4g,4e6,2a,2b,c6,b,a,4c6,b,a,4d6,c6,b,4d6,c6,b,4e6,d6,e6,4f#6,4b,1g6";
+const char tone_0[] PROGMEM  = "MacGyver:d=8,o=5,b=160:c6,c6,c6,c6,c6,c6,c6,c6,2b,f#,4a,2g,p,c6,4c6,4b,a,b,a,4g,4e6,2a,c6,4c6,2b,p,f#,4a,2g,p,c6,4c6,4b,a,b,a,4g,4e6,2a,2b,c6,b,a,4c6,b,a,4d6,c6,b,4d6,c6,b,4e6,d6,e6,4f#6,4b,1g6";
 const char tone_1[] PROGMEM  = "Yaketysax:d=4,o=5,b=125:8d.,16e,8g,8g,16e,16d,16a4,16b4,16d,16b4,8e,16d,16b4,16a4,16b4,8a4,16a4,16a#4,16b4,16d,16e,16d,g,p,16d,16e,16d,8g,8g,16e,16d,16a4,16b4,16d,16b4,8e,16d,16b4,16a4,16b4,8d,16d,16d,16f#,16a,8f,d,p,16d,16e,16d,8g,16g,16g,8g,16g,16g,8g,8g,16e,8e.,8c,8c,8c,8c,16e,16g,16a,16g,16a#,8g,16a,16b,16a#,16b,16a,16b,8d6,16a,16b,16d6,8b,8g,8d,16e6,16b,16b,16d,8a,8g,g";
 const char tone_2[] PROGMEM  = "Ateam:d=4,o=5,b=140:4f6,8c6,2f6,8a#,4c6,2f,16a,16c6,8f6,8f6,8g6,2f6,8d#.6,16d6,16c6,8a#.,2c6,8f6,8f6,8c6,2f6,8a,8a#,8g,8c6,2f,8g#.,8a#.,2d#6,8d#6,8d6,8p,8a#,8d#.6,16p,8d6,8p,8a.,16a#,8c6,2f6,8c6,8a#,8p,8f,4c6,8a#.,16p,8a#,8a,8f,8e,2f,8a,8a,8g,4a,8g.,16p,8a.,16p,8g.,16p,8g,8d.6,16p,4c6,8a,8a,8g,8a.,16p,8g.,16p,8f.,16p,8f.,16p,8f,4g.,16p,8a,8a,8g,8a.,16p,8g.,16p,8a,8p,8g.,16p,8g,8d.6,16p,8c.6,16p,8a,8a,8g,8a.,16p,8g.,16p,8f,8p,8f.,16p,8f,4e.";
 const char tone_3[] PROGMEM  = "HogansHero:d=16,o=6,b=45:f.5,g#.5,c#.,f.,f#,32g#,32f#.,32f.,8d#.,f#,32g#,32f#.,32f.,d#.,g#.5,c#,32c,32c#.,32a#.5,8g#.5,f.5,g#.5,c#.,f.5,32f#.5,a#.5,32f#.5,d#.,f#.,32f.,g#.,32f.,c#.,d#.,8c#.";
