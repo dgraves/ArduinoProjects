@@ -1,5 +1,6 @@
 import javax.swing.JOptionPane;
 import processing.serial.*;
+import processing.video.*;
 
 final int WIDTH = 480;
 final int HEIGHT = 480;
@@ -23,6 +24,8 @@ final int VIOLET = 7;
 
 final int NUM_COLORS = 8;
 
+final int VIDEO_FRAME_RATE = 30;
+
 // Color values: roygbiv values from http://www.lexipixel.com/graphics/roygbiv.htm
 final int[] COLORS = { #FFFFFF /*white*/, #FF0000 /*red*/, #FFA500 /*orange*/,
                        #FFFF00 /*yellow*/, #008000 /*green*/, #0000FF /*blue*/,
@@ -45,6 +48,9 @@ FadingText toneName;
 // Port for communicating with Arduino
 Serial arduinoPort;
 
+// Object for creating videos of the visualizer
+MovieMaker movieMaker = null;
+
 void setup() {
   size(WIDTH, HEIGHT);
   arduinoPort = new Serial(this, Serial.list()[0], BAUD_RATE);
@@ -61,6 +67,8 @@ void setup() {
   toneName = new FadingText(10, 10, CIRCLE_DIAMETER/5, #FFFFFF);
   toneName.setFadedValue(1.0/3.0);
   toneName.setAlignment(LEFT, TOP);
+
+  frameRate(VIDEO_FRAME_RATE);
 
   println("\n\n\nWelcome to the Arduino ringtone visualizer!");
   println("Press the spacebar to send a custom ringtone to the Arduino.");
@@ -117,6 +125,18 @@ void keyPressed() {
         }
       }
     }
+  } else if (key == '\n') {
+    if (movieMaker == null) {
+      // Start recording a video
+      println("Video recording started.");
+      movieMaker = new MovieMaker(this, WIDTH, HEIGHT, "ringtoneVisualizer.mov",
+                                  VIDEO_FRAME_RATE, MovieMaker.JPEG, MovieMaker.LOSSLESS);
+    } else {
+      // Stop video recording
+      movieMaker.finish();
+      movieMaker = null;
+      println("Video recording stopped.");
+    }
   }
 }
 
@@ -128,10 +148,16 @@ void initScreen() {
 
 void draw() {
   initScreen();
+
   noteName.draw();
   toneName.draw();
+
   for (FadingCircle circle: circles) {
     circle.draw();
+  }
+
+  if (movieMaker != null) {
+    movieMaker.addFrame();
   }
 }
 
