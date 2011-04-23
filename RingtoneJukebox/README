@@ -1,0 +1,38 @@
+Project Description
+===================
+The Arduino Ringtone Jukebox is a project for the Arduino Development Environment that makes the Arduino microcontroller development board play ringtones and transmit ringtone information to a PC for visualization with a Processing application.  
+
+Sixteen pre-programmed ringtones are stored on the Arduino, with support for loading a user specified ringtone into the Arduino's EEPROM.  The user specified ringtone is received through the Serial device.  Three buttons control the playing of ringtones.  Two of the buttons are used to cycle through the ringtones in the jukebox, one to select the next ringtone in the jukebux and one to select the previous ringtone in the jukebox.  The third button toggles the playing of the current ringtone.  A LED blinks along with the ringtone while it is playing, and information for each note is written to the Serial device as it is played.  
+
+A program written with the Processing programming language receives ringtone information transmitted by the Arduino board for visualization.  The Processing program displays a ring of darkly colored circles in its main window.  The ring of circles is intended to simulate a ring of lights.  When note data is received from the Arduino, a circle associated with the note is temporarily redrawn with a brighter color for a duration determined by the duration of the note, making the circle appear to blink.  The name of the current ringtone is also displayed in the upper left hand corner of the program's window.  
+
+User specified ringtones can be tranmistted to the Arduino board with the Processing program.  Pressing the space bar will display a dialogbox to which an RTTTL ringtone can be entered.  A database of RTTTL ringtones can be found at: http://merwin.bespin.org/db/rts/
+
+The Processing program is also capable of recording video.  Video recording is toggled with the Enter key.  
+
+
+Software Installation
+=====================
+The Ringtone Jukebox project consists of a project for the Arduino IDE (http://arduino.cc/en/Main/Software) and a project for the Processing IDE (http://www.processing.org/download/).  Each project can be compiled, installed, and run with its associated IDE.  
+
+
+Hardware Setup
+==============
+A schematic file for the Fritizing program (http://fritzing.org/download/) provides details for connecting the necessary parts to the Arduino board.  The necessary parts are:
+  1. One 8 ohm piezo speaker
+  2. Three pushbuttons
+  3. One LED
+  4. Three 10k ohm resistors
+  5. One 330 ohm resistor
+  6. One 100 ohm resistor
+  7. Some wires
+
+
+License
+=======
+The source code and schematics for the Arduino Ringtone Jukebox project have been made available with the MIT License.  See the file named COPYING for details.  
+
+
+Dependencies
+============
+The Arduino program depends on the Bounce library:  http://arduino.cc/playground/Code/Bounce
