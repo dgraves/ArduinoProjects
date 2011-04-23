@@ -155,8 +155,7 @@ void keyPressed() {
 
 void initScreen() {
   background(0);
-  stroke(0);
-  strokeWeight(1);
+  noStroke();
 }
 
 void draw() {
