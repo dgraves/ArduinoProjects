@@ -120,9 +120,9 @@ void draw() {
   text("Nunchuk Processed Data", 10, 10 + (FONT_SIZE * count++));
   text("  Joystick X: " + nunchukStateProcessor.joystickX(), 10, 10 + (FONT_SIZE * count++));
   text("  Joystick Y: " + nunchukStateProcessor.joystickY(), 10, 10 + (FONT_SIZE * count++));
-  text("  Acceleration X: " + nunchukStateProcessor.accelerationX(), 10, 10 + (FONT_SIZE * count++));
-  text("  Acceleration Y: " + nunchukStateProcessor.accelerationY(), 10, 10 + (FONT_SIZE * count++));
-  text("  Acceleration Z: " + nunchukStateProcessor.latchedAccelerationZ(), 10, 10 + (FONT_SIZE * count++));
+  text("  Rotation: " + nunchukStateProcessor.accelerationX(), 10, 10 + (FONT_SIZE * count++));
+  text("  Tilt: " + nunchukStateProcessor.accelerationY(), 10, 10 + (FONT_SIZE * count++));
+  text("  Reset: " + nunchukStateProcessor.accelerationZ(), 10, 10 + (FONT_SIZE * count++));
   text("  Button C: " + (nunchukStateProcessor.isButtonCDown() ? "Down" : "Up"), 10, 10 + (FONT_SIZE * count++));
   text("  Button Z: " + (nunchukStateProcessor.isButtonZDown() ? "Down" : "Up"), 10, 10 + (FONT_SIZE * count++));
 
@@ -202,13 +202,13 @@ String nunchukProcessedState() {
   s.append("" + nunchukStateProcessor.joystickX());
   s.append("</JoystickX>\n\t<JoystickY>");
   s.append(nunchukStateProcessor.joystickY());
-  s.append("</JoystickY>\n\t<AccelerationX>");
+  s.append("</JoystickY>\n\t<Rotation>");
   s.append(nunchukStateProcessor.accelerationX());
-  s.append("</AccelerationX>\n\t<AccelerationY>");
+  s.append("</Rotation>\n\t<Tilt>");
   s.append(nunchukStateProcessor.accelerationY());
-  s.append("</AccelerationY>\n\t<AccelerationZ>");
-  s.append(nunchukStateProcessor.accelerationZ());
-  s.append("</AccelerationZ>\n\t<ButtonZ>");
+  s.append("</Tilt>\n\t<Reset>");
+  s.append(nunchukStateProcessor.latchedAccelerationZ());
+  s.append("</Reset>\n\t<ButtonZ>");
   s.append(nunchukStateProcessor.isButtonZDown() ? 1 : 0);
   s.append("</ButtonZ>\n\t<ButtonC>");
   s.append(nunchukStateProcessor.isButtonCDown() ? 1 : 0);
