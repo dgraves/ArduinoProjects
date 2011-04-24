@@ -34,6 +34,12 @@ const unsigned int LED_PIN         = 12;
 const unsigned int BAUD_RATE = 19200;
 const unsigned int MAX_RINGTONE_LENGTH = 500;
 
+const char COMMAND_NOTE[] = "note";
+const char COMMAND_PLAY[] = "play";
+const char COMMAND_SELECT[] = "select";
+const char COMMAND_STOP[] = "stop";
+
+
 void setup() {
   pinMode(PLAY_BUTTON_PIN, INPUT);
   pinMode(NEXT_BUTTON_PIN, INPUT);
@@ -46,7 +52,7 @@ void setup() {
   RingtonePlayer.begin(SPEAKER_PIN);
   RingtonePlayer.setPlayNoteCallback(playNoteCallback);
   RingtonePlayer.selectRingtone(0);
-  sendStateChange("Select", RingtonePlayer.ringtoneName());
+  sendStateChange(COMMAND_SELECT, RingtonePlayer.ringtoneName());
 }
 
 const unsigned int DEBOUNCE_DELAY = 20;
@@ -112,7 +118,7 @@ void readRingtone() {
 
         // Select the new ringtone
         RingtonePlayer.selectUserRingtone();
-        sendStateChange("Select", RingtonePlayer.ringtoneName());
+        sendStateChange(COMMAND_SELECT, RingtonePlayer.ringtoneName());
       }
     }
   }
@@ -163,10 +169,10 @@ void handlePlayButton() {
     if (playButton.read() == HIGH) {
       // Play the ringtone; restart if already playing
       if (RingtonePlayer.isPlaying()) {
-        sendStateChange("Stop", RingtonePlayer.ringtoneName());
+        sendStateChange(COMMAND_STOP, RingtonePlayer.ringtoneName());
         RingtonePlayer.stop();
       } else {
-        sendStateChange("Play", RingtonePlayer.ringtoneName());
+        sendStateChange(COMMAND_PLAY, RingtonePlayer.ringtoneName());
         RingtonePlayer.play();
       }
     }
@@ -200,7 +206,7 @@ void handleNextButton() {
         }
       }
 
-      sendStateChange("Select", RingtonePlayer.ringtoneName());
+      sendStateChange(COMMAND_SELECT, RingtonePlayer.ringtoneName());
 
       if (play) {
         RingtonePlayer.play();
@@ -233,7 +239,7 @@ void handlePrevButton() {
         }
       }
 
-      sendStateChange("Select", RingtonePlayer.ringtoneName());
+      sendStateChange(COMMAND_SELECT, RingtonePlayer.ringtoneName());
 
       if (play) {
         RingtonePlayer.play();
@@ -245,7 +251,7 @@ void handlePrevButton() {
 void playNoteCallback(const Note& note) {
   if (note.id() != 0xFF) {
     Serial.print("{");
-    Serial.print("Note");
+    Serial.print(COMMAND_NOTE);
     Serial.print(",");
     Serial.print((int)note.id());
     Serial.print(",");
@@ -254,7 +260,7 @@ void playNoteCallback(const Note& note) {
     Serial.print(note.duration());
     Serial.println("}");
   } else {
-    sendStateChange("Stop", RingtonePlayer.ringtoneName());
+    sendStateChange(COMMAND_STOP, RingtonePlayer.ringtoneName());
   }
 }
 
