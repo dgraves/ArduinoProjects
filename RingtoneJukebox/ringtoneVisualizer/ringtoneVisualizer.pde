@@ -21,9 +21,15 @@ final int CENTER_X = WIDTH/2;
 final int CENTER_Y = HEIGHT/2;
 final int CIRCLE_DIAMETER = (HEIGHT / 3) - (int)(HEIGHT * 0.1);
 
+final int VIDEO_FRAME_RATE = 30;
+
 final int LINE_FEED = 10;
 final int BAUD_RATE = 19200;
 final int MAX_RINGTONE_LENGTH = 500;
+
+// Command received from Arduino
+final String COMMAND_NOTE = "note";
+final String COMMAND_SELECT = "select";
 
 // Indexes for color values
 final int WHITE = 0;
@@ -36,8 +42,6 @@ final int INDIGO = 6;
 final int VIOLET = 7;
 
 final int NUM_COLORS = 8;
-
-final int VIDEO_FRAME_RATE = 30;
 
 // Color values: roygbiv values from http://www.lexipixel.com/graphics/roygbiv.htm
 final int[] COLORS = { #FFFFFF /*white*/, #FF0000 /*red*/, #FFA500 /*orange*/,
@@ -62,12 +66,11 @@ FadingText toneName;
 Serial arduinoPort;
 
 // Object for creating videos of the visualizer
-MovieMaker movieMaker = null;
+MovieMaker movieMaker;
 
 void setup() {
   size(WIDTH, HEIGHT);
-  arduinoPort = new Serial(this, Serial.list()[0], BAUD_RATE);
-  arduinoPort.bufferUntil(LINE_FEED);
+  frameRate(VIDEO_FRAME_RATE);
 
   createCircles();
   for(FadingCircle circle: circles) {
@@ -81,7 +84,10 @@ void setup() {
   toneName.setFadedValue(1.0/3.0);
   toneName.setAlignment(LEFT, TOP);
 
-  frameRate(VIDEO_FRAME_RATE);
+  movieMaker = null;
+  
+  arduinoPort = new Serial(this, Serial.list()[0], BAUD_RATE);
+  arduinoPort.bufferUntil(LINE_FEED);
 
   println("\n\n\nWelcome to the Arduino ringtone visualizer!");
   println("Press the spacebar to send a custom ringtone to the Arduino.");
@@ -104,8 +110,10 @@ void serialEvent(Serial port) {
 void keyPressed() {
   if (key == ' ') {
     // Get a ringtone from the user
-    String ringtone = (String)JOptionPane.showInputDialog(this,
-        "Paste a new ringtone into the text entry field below:");
+    String ringtone = JOptionPane.showInputDialog(this,
+        "Paste a new ringtone into the text entry field below:",
+        "RTTTL Entry",
+        JOptionPane.PLAIN_MESSAGE);
 
     if (ringtone != null && !ringtone.isEmpty()) {
       ringtone = trim(ringtone);
@@ -190,7 +198,7 @@ void createCircles() {
 }
 
 void processCommand(final String command, final String[] parameters) {
-  if (command.equals("Note")) {
+  if (command.equals(COMMAND_NOTE)) {
     // Must have 3 parameters
     if (parameters.length == 3) {
       int id = Integer.parseInt(parameters[0]);
@@ -211,7 +219,7 @@ void processCommand(final String command, final String[] parameters) {
       noteName.on(duration);
       noteName.setFadeDuration(duration);
     }
-  } else if (command.equals("Select")) {
+  } else if (command.equals(COMMAND_SELECT)) {
     if (parameters.length == 1) {
       toneName.setMessage(parameters[0]);
       toneName.on(1000);
