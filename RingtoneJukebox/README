@@ -1,5 +1,5 @@
-Project Description
-===================
+Project Description - Arduino Ringtone Jukebox version 1.0
+==========================================================
 The Arduino Ringtone Jukebox is a project for the Arduino Development Environment that makes the Arduino microcontroller development board play ringtones and transmit ringtone information to a PC for visualization with a Processing application.  
 
 Sixteen pre-programmed ringtones are stored on the Arduino, with support for loading a user specified ringtone into the Arduino's EEPROM.  The user specified ringtone is received through the Serial device.  Three buttons control the playing of ringtones.  Two of the buttons are used to cycle through the ringtones in the jukebox, one to select the next ringtone in the jukebux and one to select the previous ringtone in the jukebox.  The third button toggles the playing of the current ringtone.  A LED blinks along with the ringtone while it is playing, and information for each note is written to the Serial device as it is played.  
