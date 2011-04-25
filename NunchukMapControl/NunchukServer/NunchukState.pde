@@ -1,4 +1,4 @@
-// Buffers raw state data 
+// Stores raw state data received from the Wii Nunchuk.
 class NunchukState {
   private int _joystickX;
   private int _joystickY;

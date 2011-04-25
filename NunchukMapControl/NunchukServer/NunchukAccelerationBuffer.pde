@@ -1,3 +1,4 @@
+// Smooths acceleration state data received from Wii Nunchuk.
 // Based on SensorDataBuffer class from Arduino: A Quick-Start Guide, by Maik Schmidt
 class NunchukAccelerationBuffer {
   private int _maxSamples;

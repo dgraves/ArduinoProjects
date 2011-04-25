@@ -35,6 +35,10 @@ final String RECORD_UPDATE = "update";
 final String RAW_URL = "/nunchuk/state/raw";
 final String PROCESSED_URL = "/nunchuk/state/processed";
 
+// Location of files to be loaded by web server
+final String ROOT_URL = "/";
+String webRoot;
+
 // String storing information for last page served
 String lastPage;
 
@@ -53,6 +57,8 @@ Serial arduinoPort;
 void setup() {
   size(WIDTH, HEIGHT);
   frameRate(FRAME_RATE);
+
+  webRoot = System.getProperty("user.home") + "/Documents/Arduino/NunchukMapControl/MapPages";
 
   nunchukState = new NunchukState(MAX_SAMPLES);
   nunchukStateProcessor = new NunchukStateProcessor();
@@ -102,6 +108,7 @@ void draw() {
   // Server data
   text("HTTP Server Status", 10, 10 + (FONT_SIZE * count++));
   text("  URL: http://localhost:" + SERVER_PORT, 10, 10 + (FONT_SIZE * count++));
+  text("  WWW Root: " + webRoot, 10, 10 + (FONT_SIZE * count++));
   text("  Last Activity: " + lastPage, 10, 10 + (FONT_SIZE * count++));
     
   // Raw state data
@@ -118,13 +125,13 @@ void draw() {
   // Processed state data
   count++;
   text("Nunchuk Processed Data", 10, 10 + (FONT_SIZE * count++));
-  text("  Joystick X: " + nunchukStateProcessor.joystickX(), 10, 10 + (FONT_SIZE * count++));
-  text("  Joystick Y: " + nunchukStateProcessor.joystickY(), 10, 10 + (FONT_SIZE * count++));
+  text("  Pan X: " + nunchukStateProcessor.joystickX(), 10, 10 + (FONT_SIZE * count++));
+  text("  Pan Y: " + nunchukStateProcessor.joystickY(), 10, 10 + (FONT_SIZE * count++));
   text("  Rotation: " + nunchukStateProcessor.accelerationX(), 10, 10 + (FONT_SIZE * count++));
   text("  Tilt: " + nunchukStateProcessor.accelerationY(), 10, 10 + (FONT_SIZE * count++));
   text("  Reset: " + nunchukStateProcessor.accelerationZ(), 10, 10 + (FONT_SIZE * count++));
-  text("  Button C: " + (nunchukStateProcessor.isButtonCDown() ? "Down" : "Up"), 10, 10 + (FONT_SIZE * count++));
-  text("  Button Z: " + (nunchukStateProcessor.isButtonZDown() ? "Down" : "Up"), 10, 10 + (FONT_SIZE * count++));
+  text("  Zoom In: " + (nunchukStateProcessor.isButtonCDown() ? "Down" : "Up"), 10, 10 + (FONT_SIZE * count++));
+  text("  Zoom Out: " + (nunchukStateProcessor.isButtonZDown() ? "Down" : "Up"), 10, 10 + (FONT_SIZE * count++));
 
   // Calibration data values
   count++;
@@ -140,29 +147,24 @@ void setupHttpServer() {
   try {
     httpServer = HttpServer.create(new InetSocketAddress(SERVER_PORT), 8);
 
+    // Create context to serve files
+    httpServer.createContext(ROOT_URL, new RequestHandler(new FileResponseGenerator(webRoot)));
+
     // Create context to handle requests for raw nunchuk state data request
-    httpServer.createContext(RAW_URL, new HttpHandler() {
-      public void handle(HttpExchange ex) throws IOException {
-        String response = nunchukRawState();
-        ex.sendResponseHeaders(200, response.length());
-        OutputStream os = ex.getResponseBody();
-        os.write(response.getBytes());
+    httpServer.createContext(RAW_URL, new RequestHandler(new ResponseGenerator() {
+      public String generateResponse(HttpExchange ex) {
         setLastPageRequested(RAW_URL, ex.getRemoteAddress().toString());
-        os.close();
+        return nunchukRawResponse();
       }
-    });
+    }));
 
     // Create context to handle requests for processed nunchuk state data request
-    httpServer.createContext(PROCESSED_URL, new HttpHandler() {
-      public void handle(HttpExchange ex) throws IOException {
-        String response = nunchukProcessedState();
-        ex.sendResponseHeaders(200, response.length());
-        OutputStream os = ex.getResponseBody();
-        os.write(response.getBytes());
+    httpServer.createContext(PROCESSED_URL, new RequestHandler(new ResponseGenerator() {
+      public String generateResponse(HttpExchange ex) {
         setLastPageRequested(PROCESSED_URL, ex.getRemoteAddress().toString());
-        os.close();
+        return nunchukProcessedResponse();
       }
-    });
+    }));
 
     httpServer.setExecutor(null);
     httpServer.start();
@@ -177,8 +179,8 @@ void setLastPageRequested(String url, String hostinfo) {
 }
 
 // Provide Nunchuk raw data as an XML string
-String nunchukRawState() {
-  StringBuffer s = new StringBuffer("<NunchukState>\n\t<JoystickX>");
+String nunchukRawResponse() {
+  StringBuffer s = new StringBuffer("<NunchukRawState>\n\t<JoystickX>");
   s.append("" + nunchukState.joystickX());
   s.append("</JoystickX>\n\t<JoystickY>");
   s.append(nunchukState.joystickY());
@@ -192,27 +194,27 @@ String nunchukRawState() {
   s.append(nunchukState.isButtonZDown() ? 1 : 0);
   s.append("</ButtonZ>\n\t<ButtonC>");
   s.append(nunchukState.isButtonCDown() ? 1 : 0);
-  s.append("</ButtonC>\n</NunchukState>");  
+  s.append("</ButtonC>\n</NunchukRawState>");  
   return s.toString();
 }
 
 // Provide Nunchuk processed data as an XML string
-String nunchukProcessedState() {
-  StringBuffer s = new StringBuffer("<NunchukState>\n\t<JoystickX>");
+String nunchukProcessedResponse() {
+  StringBuffer s = new StringBuffer("<NunchukProcessedState>\n\t<PanX>");
   s.append("" + nunchukStateProcessor.joystickX());
-  s.append("</JoystickX>\n\t<JoystickY>");
+  s.append("</PanX>\n\t<PanY>");
   s.append(nunchukStateProcessor.joystickY());
-  s.append("</JoystickY>\n\t<Rotation>");
+  s.append("</PanY>\n\t<Rotation>");
   s.append(nunchukStateProcessor.accelerationX());
   s.append("</Rotation>\n\t<Tilt>");
   s.append(nunchukStateProcessor.accelerationY());
   s.append("</Tilt>\n\t<Reset>");
   s.append(nunchukStateProcessor.latchedAccelerationZ());
-  s.append("</Reset>\n\t<ButtonZ>");
+  s.append("</Reset>\n\t<ZoomOut>");
   s.append(nunchukStateProcessor.isButtonZDown() ? 1 : 0);
-  s.append("</ButtonZ>\n\t<ButtonC>");
+  s.append("</ZoomOut>\n\t<ZoomIn>");
   s.append(nunchukStateProcessor.isButtonCDown() ? 1 : 0);
-  s.append("</ButtonC>\n</NunchukState>");  
+  s.append("</ZoomIn>\n</NunchukProcessedState>");  
   return s.toString();
 }
 
