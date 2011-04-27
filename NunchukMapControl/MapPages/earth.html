@@ -33,6 +33,24 @@
         var _tilt = 0;                             // Camera Pitch/Elevation rate of change
         var _lastUpdate = (new Date()).getTime();  // Time of last update in milliseconds
 
+        function computeScale(altitude) {
+          if (altitude < 10) {
+            return 0.00001;
+          } else if (altitude < 100) {
+            return 0.00001 * (altitude / 10);
+          } else if (altitude < 1000) {
+            return 0.0001 * (altitude / 100);
+          } else if (altitude < 10000) {
+            return 0.001 * (altitude / 1000);
+          } else if (altitude < 100000) {
+            return 0.01 * (altitude / 10000);
+          } else if (altitude < 1000000) {
+            return 0.1 * (altitude / 100000);
+          } else {
+            return 1.0;
+          }
+        }
+
         this.update = function() {
           var changed = false;
           var camera = _self._ge.getView().copyAsCamera(this._ge.ALTITUDE_ABSOLUTE);
@@ -44,12 +62,12 @@
 
           if (_panX !== 0) {
             changed = true;
-            camera.setLongitude(camera.getLongitude() + NunchukCameraControl.PAN_INCREMENT * dt * _panX);
+            camera.setLongitude(camera.getLongitude() + NunchukCameraControl.PAN_INCREMENT * dt * _panX * computeScale(camera.getAltitude()));
           }
 
           if (_panY !== 0) {
             changed = true;
-            camera.setLatitude(camera.getLatitude() + NunchukCameraControl.PAN_INCREMENT * dt * _panY);
+            camera.setLatitude(camera.getLatitude() + NunchukCameraControl.PAN_INCREMENT * dt * _panY * computeScale(camera.getAltitude()));
           }
           
           if (_zoom !== 0) {
@@ -67,7 +85,7 @@
 
           if (_tilt !== 0) {
             changed = true;
-            camera.setTilt(camera.getTilt() + NunchukCameraControl.TILT_INCREMENT * dt * _tilt);
+            camera.setTilt(camera.getTilt() + NunchukCameraControl.TILT_INCREMENT * dt * -_tilt);
           }
 
           if (changed) {
@@ -175,9 +193,9 @@
             if (zoomin === 1 && zoomout === 1) {
               _nunchuk.setZoomRate(0);
             } else if (zoomin === 1) {
-              _nunchuk.setZoomRate(-1);
-            } else if (zoomout === 1) {
               _nunchuk.setZoomRate(1);
+            } else if (zoomout === 1) {
+              _nunchuk.setZoomRate(-1);
             } else {
               _nunchuk.setZoomRate(0);
             }
@@ -219,7 +237,10 @@
         // Disable mouse navigation; Nunchuk only
         ge.getOptions().setMouseNavigationEnabled(false);
         ge.getOptions().setGridVisibility(true);
-          
+        ge.getOptions().setStatusBarVisibility(true);
+        ge.getOptions().setScaleLegendVisibility(true);
+        ge.getLayerRoot().enableLayerById(ge.LAYER_BUILDINGS, true);
+
         nunchuk = new NunchukCameraControl(ge);
         updater = new NunchukUpdater(nunchuk);
 
