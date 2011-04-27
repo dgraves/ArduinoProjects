@@ -54,13 +54,15 @@
           
           if (_zoom !== 0) {
             changed = true;
-            var newValue = camera.getAltitude() + NunchukCameraControl.ZOOM_INCREMENT * dt * _zoom;
-            camera.setAltitude(newValue);
+            
+            // To maintain a steady zoom rate the zoom increment is calculated as camera altitude / 10
+            var zoom = camera.getAltitude();
+            camera.setAltitude(zoom + ((zoom * 0.1) * NunchukCameraControl.ZOOM_SCALE * dt * _zoom));
           }
 
           if (_rotation !== 0) {
             changed = true;
-            camera.setRoll(camera.getRoll() + NunchukCameraControl.ROTATION_INCREMENT * dt * _rotation);
+            camera.setHeading(camera.getHeading() + NunchukCameraControl.ROTATION_INCREMENT * dt * _rotation);
           }
 
           if (_tilt !== 0) {
@@ -111,12 +113,12 @@
       
       NunchukCameraControl.DEFAULT_ORIGIN = [42.367778, -71.070997, 10000000.0];
       NunchukCameraControl.ROTATION_TILT_THRESHOLD = 2;
+      NunchukCameraControl.ZOOM_SCALE = 5.0;
 
-      // Default increments cor control motion as degrees per second
+      // Default increments for motion as degrees per second
       NunchukCameraControl.PAN_INCREMENT = 1.0;
-      NunchukCameraControl.ZOOM_INCREMENT = 1000000.0;
-      NunchukCameraControl.ROTATION_INCREMENT = 2.0;
-      NunchukCameraControl.TILT_INCREMENT = 2.0;
+      NunchukCameraControl.ROTATION_INCREMENT = 3.0;
+      NunchukCameraControl.TILT_INCREMENT = 3.0;
     </script>
     <script type="text/javascript">
       // From http://eloquentjavascript.net/chapter14.html
