@@ -28,7 +28,7 @@ class NunchukStateProcessor extends NunchukState {
   // When tilted, accelerometer values range roughly from [300, 700]
   final private int TILT_MIN = 300;  // Tilted all the way to the left/up
   final private int TILT_MAX = 700;  // Tilted all the way to the right/down
-  final private int TILT_ADJUSTMENT = 30;
+  final private int TILT_ADJUSTMENT = 45;
 
   private NunchukState _calibratedState;
 
