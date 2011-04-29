@@ -110,7 +110,7 @@ class NunchukStateProcessor extends NunchukState {
   }
   
   private int normalizePosition(int position, int center) {
-    int value = (int)floor(((float)(position - center) / ((float)center - JOYSTICK_ADJUSTMENT)) * 10.0);
+    int value = (int)(((float)(position - center) / ((float)center - JOYSTICK_ADJUSTMENT)) * 10.0);
     return clamp(value, -10, 10);
   }
 
