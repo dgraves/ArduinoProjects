@@ -51,6 +51,24 @@
           }
         }
 
+        // Rotate the x or y axis to aligh with camera heading. Axis is specified
+        // as unit vectors x = [1, 0] and y = [0,1]. Returns the rotate vector.
+        function computeDirection(axis, heading) {
+          var result = [0, 0];
+          var headingRad = heading * Math.PI/180;
+          result[0] =  axis[0] * Math.cos(headingRad) + axis[1] * Math.sin(headingRad);
+          result[1] = -axis[0] * Math.sin(headingRad) + axis[1] * Math.cos(headingRad);
+          return result;
+        }
+
+        function computeDirectionX(heading) {
+          return computeDirection([1, 0], heading);
+        }
+
+        function computeDirectionY(heading) {
+          return computeDirection([0, 1], heading);
+        }
+
         this.update = function() {
           var changed = false;
           var camera = _self._ge.getView().copyAsCamera(this._ge.ALTITUDE_ABSOLUTE);
@@ -62,12 +80,22 @@
 
           if (_panX !== 0) {
             changed = true;
-            camera.setLongitude(camera.getLongitude() + NunchukCameraControl.PAN_INCREMENT * dt * _panX * computeScale(camera.getAltitude()));
+            
+            // Align rotation with heading
+            var go = NunchukCameraControl.PAN_INCREMENT * dt * _panX * computeScale(camera.getAltitude());
+            var direction = computeDirectionX(camera.getHeading());
+            camera.setLongitude(camera.getLongitude() + direction[0] * go);
+            camera.setLatitude(camera.getLatitude() + direction[1] * go);
           }
 
           if (_panY !== 0) {
             changed = true;
-            camera.setLatitude(camera.getLatitude() + NunchukCameraControl.PAN_INCREMENT * dt * _panY * computeScale(camera.getAltitude()));
+
+            // Align rotation with heading
+            var go = NunchukCameraControl.PAN_INCREMENT * dt * _panY * computeScale(camera.getAltitude());
+            var direction = computeDirectionY(camera.getHeading());
+            camera.setLongitude(camera.getLongitude() + direction[0] * go);
+            camera.setLatitude(camera.getLatitude() + direction[1] * go);
           }
           
           if (_zoom !== 0) {
@@ -128,7 +156,7 @@
 
         this.getLastUpdate = function() { return _lastUpdate; };
       }
-      
+
       NunchukCameraControl.DEFAULT_ORIGIN = [42.367778, -71.070997, 10000000.0];
       NunchukCameraControl.ROTATION_TILT_THRESHOLD = 2;
       NunchukCameraControl.ZOOM_SCALE = 5.0;
