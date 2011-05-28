@@ -107,7 +107,7 @@ void serialEvent(Serial port) {
   }
 }
 
-void keyPressed() {
+void keyReleased() {
   if (key == ' ') {
     // Get a ringtone from the user
     String ringtone = JOptionPane.showInputDialog(this,
