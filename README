@@ -10,9 +10,9 @@ Play RTTTL formatted ringtones.  Contains 16 preprogrammed ringtones, with capac
 
 * 3D Map Control - Created April 2011
 -------------------------------------
-Use the Wii Nunchuk to control Google Earth in a web wrowser.  Nunchuk state information transmitted from an Arduino to a computer is made available through a simple web service, provided by a simple Processing/Java based web server.  JavaScript code to control the Google Earth web browser plug-in is included.
+Use the Wii Nunchuk to control Google Earth in a web browser.  Nunchuk state information transmitted from an Arduino to a computer is made available through a simple web service, provided by a simple Processing/Java based web server.  JavaScript code to control the Google Earth web browser plug-in is included.
 
 
 * Mailbox Monitor - Created April 2011
 --------------------------------------
-Detect the presence of "snail mail" within an old-fashioned mailbox.  The presence of objects placed between an IR emitter and receiver is detected by a program running on an Arduino board and reported to a computer responsible for posting a notification.  Communication between Arudino board and computer is performed through an RF modem, such as an XBee.
+Detect the presence of "snail mail" within an old-fashioned mailbox.  The presence of objects placed between an IR emitter and detector is detected by a program running on an Arduino board and reported to a computer responsible for posting a notification.  Communication between Arudino board and computer is performed through an RF modem, such as an XBee.
