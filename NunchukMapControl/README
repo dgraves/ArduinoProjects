@@ -1,5 +1,5 @@
-Project Description - Arduino Nunchuk Map Control
-=================================================
+Project Description - Arduino Nunchuk Map Control version 1.0
+=============================================================
 Use the Wii Nunchuk to control Google Earth in the Web Browser with the Arduino Nunchuk Map Control.
 
 The Arduino Nunchuk Map Control is a project for the Arduino Development Environment that uses the Arduino development board to read, decode, and transmit data received from the Wii Nunchuk to a PC.  A simple Processing/Java application running on the PC reads the Wii Nunchuk data from the Arduino development board and makes it available to any modern web browser through a simple web service.
