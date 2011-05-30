@@ -1,5 +1,5 @@
 /*
-Nunchuk Server
+Control Server
 
 For reading Nunchuk state data from the Arduino and
 making it available through a RESTful web service.
@@ -58,7 +58,7 @@ void setup() {
   size(WIDTH, HEIGHT);
   frameRate(FRAME_RATE);
 
-  webRoot = System.getProperty("user.home") + "/Documents/Arduino/NunchukMapControl/MapPages";
+  webRoot = System.getProperty("user.home") + "/Documents/Arduino/3DMapControl/MapPages";
 
   nunchukState = new NunchukState(MAX_SAMPLES);
   nunchukStateProcessor = new NunchukStateProcessor();

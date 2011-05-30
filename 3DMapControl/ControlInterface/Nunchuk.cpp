@@ -1,3 +1,4 @@
+// Nunchuk class from Arduino: A Quick-Start Guide, by Maik Schmidt
 #include <WProgram.h>
 #include <Wire.h>
 #include "Nunchuk.h"

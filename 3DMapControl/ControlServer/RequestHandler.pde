@@ -1,6 +1,6 @@
 import com.sun.net.httpserver.HttpHandler;
 
-// Class to process HTTP requests received by NunchukServer.  Only
+// Class to process HTTP requests received by ControlServer.  Only
 // GET requests are processed.
 class RequestHandler implements HttpHandler {
   private ResponseGenerator _generator;
