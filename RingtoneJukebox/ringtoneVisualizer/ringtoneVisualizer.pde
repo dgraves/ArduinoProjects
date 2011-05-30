@@ -1,8 +1,8 @@
 /*
  Ringtone Visualizer
 
- For visualizing notes from ringtones played by the Arduino Ringtone
- Jukebox project.
+ For visualizing notes from ringtones played by the Ringtone
+ Jukebox project for Arduino.
 
  created 1 Mar 2011
  by Dustin Graves
