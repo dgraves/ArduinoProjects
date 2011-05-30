@@ -1,0 +1,32 @@
+Project Description - Mailbox Monitor
+=====================================
+The Mailbox Monitor detects the presence of "snail mail" within an old-fashioned mailbox.
+
+The presence of objects placed between an IR emitter and receiver is detected by a program running on an Arduino development board (MailboxMonitor).  Requests received through the Serial device activate the detection process.  The results are reported through the Serial device. A Processing program (MailboxReporter) receives the reported data and provides notification when mail is present.
+
+Designed to be placed in a mailbox to detect that mail is present and needs to be retrieved.  An RF modem, such as an XBee, is intended to be used for wireless communication between the device placed in a mailbox and a computer.
+
+
+Software Installation
+=====================
+The Mailbox Monitor project consists of a project for the Arduino IDE (http://arduino.cc/en/Main/Software) and a project for the Processing IDE (http://www.processing.org/download/).  Each project can be compiled, installed, and run with its associated IDE. 
+
+
+Hardware Setup
+==============
+The necessary parts are:
+  1. RF modem, such as XBee or BlueSMiRF
+  2. One IR emitter LED
+  3. One IR detector (phototransistor or photodiode)
+
+For the IR emitter and receiver, I use a RadioShack part no. 276-0142.  For the RF modem I use the series 1 XBee.
+
+  
+License
+=======
+The source code for the Mailbox Monitor project has been made available with the MIT License.  See the file named COPYING for details.  
+
+
+Dependencies
+============
+None
