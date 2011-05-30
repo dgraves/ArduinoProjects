@@ -13,19 +13,23 @@ The Nunchuk Map Control project consists of a project for the Arduino IDE (http:
 
 The Arduino IDE project, NunchukInterface, is fairly simple and should require no special configuration.
 
-The Processing IDE project, NunchukServer, contains a web server component to make the Wii Nunchuk data available to a web browser.  The web server also serves the Google Earth application page.  Some settings for the web server may need to be adjusted for it to function properly in your environment.
+The Processing IDE project, NunchukServer, contains a web server component to make the Wii Nunchuk data available to a web browser.  The web server also serves the Google Earth application page.  Some settings for the web server may need to be adjusted for it to function properly in your environment.  Settings that mau need adjustment are:
 
-If the Nunchuk Map Control project was not installed in the default Arduino project location, the variable specifying the document root for the web server, the folder that contains the files for the web server to serve, will need to be changed.  The default value for the web server's document root is the current user's home directory plus "/Documents/Arduino/NunchukMapControl/MapPages":
+  * Web Server's Document Root - Folder containing files for the web server to serve
+  * Web Server's Port - Network port through which the web server will receive connections
+  * Serial Port - Serial port through which the web server will receive data from the Arduino
+
+If the Nunchuk Map Control project was not installed in the default Arduino project location on a Windows system, the variable specifying the document root for the web server will need to be changed.  The default value for the web server's document root is the current user's home directory plus "/Documents/Arduino/NunchukMapControl/MapPages":
   webRoot = System.getProperty("user.home") + "/Documents/Arduino/NunchukMapControl/MapPages";
 
 This assumes that the Nunchuk Map Control project is installed in the default "My Documents" directory on a Windows system, and that the web pages to be served are contained within a subdirectory named "MapPages".  For Windows the value would be something like:
   C:/Users/me/Documents/Arduino/NunchukMapControl/MapPages
 
-If the NunchukMapControl project is not installed in this directory, or a different set of web pages is to be served, the 'webRoot' variable must be set to the location of these web pages.  
+If the NunchukMapControl project is installed in a different directory, or a different set of web pages is to be served, the 'webRoot' variable must be modified to reflect the correct location of the web pages to be served.  
 
 The default port used by the web server is port 8049.  To use a different port, set the SERVER_PORT variable to the desired port number.
 
-The default serial port used to read data from the Arduino is specified as the first available serial port.  If your Arduino is using a serial port other than the first available serial port, you will need specify that serial port when the Serial device is opened in the setup() function.  
+The default serial port used when reading data from the Arduino is specified as the first available serial port.  If your Arduino is using a serial port other than the first available serial port, you will need to explicitly specify that serial port in the project's setup() function where the Serial device is initialized.  
 
 
 Hardware Setup
