@@ -1,3 +1,28 @@
+/*
+ Reads data from the Wii Nunchuk, decodes it, and writes
+ it to the serial device.
+
+ circuit:
+ * Nunhcuk data line on analog pin 4
+ * Nunhcuk clock line on analog pin 5
+
+ Nunchuk pin diagram:
+
+                 NC
+             __  |  __
+            |  \___/  |
+  Clock ->  | *  *  * |  <- GND
+   3.3V ->  |_*__*__*_|  <- Data
+                 |
+                 NC
+
+ created 10 Apr 2011
+ by Dustin Graves
+
+ This code is licensed with the MIT License.
+
+ http://www.dgraves.org
+ */
 #include <Wire.h>
 #include "Nunchuk.h"
 
