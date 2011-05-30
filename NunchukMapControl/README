@@ -1,10 +1,10 @@
-Project Description - Arduino Nunchuk Map Control version 1.0
+Project Description - Nunchuk Map Control version 1.0
 =============================================================
-Use the Wii Nunchuk to control Google Earth in the Web Browser with the Arduino Nunchuk Map Control.
+Use the Wii Nunchuk to control Google Earth in the Web Browser with the Nunchuk Map Control for Arduino.
 
-The Arduino Nunchuk Map Control is a project for the Arduino Development Environment that uses the Arduino development board to read, decode, and transmit data received from the Wii Nunchuk to a PC.  A simple Processing/Java application running on the PC reads the Wii Nunchuk data from the Arduino development board and makes it available to any modern web browser through a simple web service.
+The Nunchuk Map Control is a project for the Arduino Development Environment that uses the Arduino development board to read, decode, and transmit data received from the Wii Nunchuk to a PC.  A simple Processing/Java application running on the PC reads the Wii Nunchuk data from the Arduino development board and makes it available to any modern web browser through a simple web service.
 
-The goal of the project is to use the Wii Nunchuk to control mapping applications such as Google Earth and Google Maps in the web browser.  JavaScript code to control the Google Earth web browser plug-in with the Wii Nunchuk is included with the project.
+The goal of the project is to use the Wii Nunchuk to control mapping applications such as Google Earth and Google Maps in the web browser.  JavaScript code to control the Google Earth web browser plug-in with the Wii Nunchuk is included with the project.  This code is found in the file 'earth.html', located in the 'MapPages' subdirectory of the main project directory.
 
 
 Software Installation
@@ -13,12 +13,12 @@ The Nunchuk Map Control project consists of a project for the Arduino IDE (http:
 
 The Arduino IDE project, NunchukInterface, is fairly simple and should require no special configuration.
 
-The Processing IDE project, NunchukServer, contains a web server component to make the Wii Nunchuk data available to a web browser.  The web server also serves the Google Earth application pages.  Some settings for the web server may need to be adjusted for it to function properly in your environment.
+The Processing IDE project, NunchukServer, contains a web server component to make the Wii Nunchuk data available to a web browser.  The web server also serves the Google Earth application page.  Some settings for the web server may need to be adjusted for it to function properly in your environment.
 
 If the Nunchuk Map Control project was not installed in the default Arduino project location, the variable specifying the document root for the web server, the folder that contains the files for the web server to serve, will need to be changed.  The default value for the web server's document root is the current user's home directory plus "/Documents/Arduino/NunchukMapControl/MapPages":
   webRoot = System.getProperty("user.home") + "/Documents/Arduino/NunchukMapControl/MapPages";
 
-This assumes that the Nunchuk Map Control project is installed in the default "My Documents" directory on your system, and that the web pages to be served are contained within a subdirectory named "MapPages".  For Windows the value would be something like:
+This assumes that the Nunchuk Map Control project is installed in the default "My Documents" directory on a Windows system, and that the web pages to be served are contained within a subdirectory named "MapPages".  For Windows the value would be something like:
   C:/Users/me/Documents/Arduino/NunchukMapControl/MapPages
 
 If the NunchukMapControl project is not installed in this directory, or a different set of web pages is to be served, the 'webRoot' variable must be set to the location of these web pages.  
