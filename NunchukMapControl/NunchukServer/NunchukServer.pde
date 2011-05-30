@@ -2,7 +2,7 @@
 Nunchuk Server
 
 For reading Nunchuk state data from the Arduino and
-making it available through RESTful HTTP requests.
+making it available through a RESTful web service.
 
 created 10 Apr 2011
 by Dustin Graves
