@@ -16,3 +16,7 @@ Use the Wii Nunchuk to control Google Earth in a web browser.  Nunchuk state inf
 * Mailbox Monitor - Created April 2011
 --------------------------------------
 Detect the presence of "snail mail" within an old-fashioned mailbox.  The presence of objects placed between an IR emitter and detector is detected by a program running on an Arduino board and reported to a computer responsible for posting a notification.  Communication between Arudino board and computer is performed through an RF modem, such as an XBee.
+
+* Easy Program Launcher - Created June 2008
+-------------------------------------------
+A program for the Teensy USB that emulates a keyboard and sends commands to a personal computer to launch an application when a button is pressed.  Compatible with both Windows and Linux operating systems.  Designed to be embedded within a hacked Easy Button from Staples.  The desired operating system is selected with a switch that is hidden in the button's battery compartment.  Based on the Awesome Button by Matt Richardson.
