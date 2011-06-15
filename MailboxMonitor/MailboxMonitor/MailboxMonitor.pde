@@ -9,7 +9,7 @@
  circuit:
  * IR receiver collector on digital pin 3 for reading data
  * IR receiver collector on digital pin 8, with 100K ohm resistor
- * IR tranmitter cathode on digital pin 9, with 100 ohm resistor
+ * IR tranmitter anode on digital pin 9, with 100 ohm resistor
  * XBee DOUT on digital pin 0 (RX)
  * XBee DIN on digital pin 1 (TX)
 
