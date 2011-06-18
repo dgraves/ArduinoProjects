@@ -27,6 +27,12 @@ final int ANNOUNCE_FONT_SIZE = 60;
 final int PAD_X = 10;
 final int PAD_Y = 10;
 
+// Parameters for email notification
+final String SMTP_HOST = "smtp.example.com";
+final int SMTP_PORT = 25;
+final String FROM_ADDRESS = "me@example.com";
+final SmtpNotification SMTP_NOTIFIER = new SmtpNotification(SMTP_HOST, SMTP_PORT);
+
 // Threshold value to indicate an object has been placed
 // between IR transmitter and receiver.  This is compared
 // with the value read from the IR receiver to determine if
@@ -131,11 +137,17 @@ void serialEvent(Serial port) {
       // An object is present
       if (!haveMail) {
         haveMail = true;
+        if (!emailAddress.isEmpty()) {
+          SMTP_NOTIFIER.send(FROM_ADDRESS, emailAddress, "You have new mail", "You have new mail waiting to be picked up!");
+        }
       }
     } else {
       // No mail is present
       if (haveMail) {
         haveMail = false;
+        if (!emailAddress.isEmpty()) {
+          SMTP_NOTIFIER.send(FROM_ADDRESS, emailAddress, "Mail retrieved", "Your mail has been picked up!");
+        }
       }
     }
   }
@@ -164,7 +176,7 @@ void keyReleased() {
       int newInterval = Integer.parseInt(seconds, 10);
       if (newInterval > 0) {
         interval = newInterval * 1000;
-        print("Set query interval to " + interval);
+        println("Set query interval to " + newInterval + " seconds");
       }
     }
   } else if (key == 'e') {
@@ -177,9 +189,9 @@ void keyReleased() {
       if (!newAddress.isEmpty()) {
         // Check for validly formed email address
         String[] matches = match(trim(newAddress), "\\w+@(\\w+\\.)+\\w+");
-        if (matches != null && matches.length == 1) {
+        if (matches != null) {
           emailAddress = matches[0];
-          print("Set email address to " + emailAddress);
+          println("Set email address to " + emailAddress);
         }
       } else {
         // Clear the address
