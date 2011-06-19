@@ -2,9 +2,9 @@ Project Description - Mailbox Monitor
 =====================================
 The Mailbox Monitor detects the presence of "snail mail" within an old-fashioned mailbox.
 
-The presence of objects placed between an IR emitter and detector is detected by a program running on an Arduino development board (MailboxMonitor).  Requests received through the Serial device activate the detection process.  The results are reported through the Serial device. 
+The presence of objects placed between an IR emitter and detector is detected by a program running on an Arduino development board (MailboxMonitor).  The detection process is triggered by a requests received through the Serial device.  The result of the detection process is reported through the Serial device. 
 
-A Processing program (MailboxReporter) sends detection requests to the Arduino at a specified interval and receives the reported data.  A visual notification is presented to indicate that mail is or is not present.  An email notification can optionally be sent when mail is added to or removed from the mail box.
+A Processing program (MailboxReporter) sends detection requests to the Arduino at a specified interval and receives the reported data.  Based on the response from the Arduino, a visual notification is displayed to indicate that mail is or is not present.  An email notification can optionally be sent when mail is added to or removed from the mail box.
 
 Designed to be placed in a mailbox to detect that mail is present and needs to be retrieved.  An RF modem, such as an XBee, is intended to be used for wireless communication between the device placed in a mailbox and a computer.
 

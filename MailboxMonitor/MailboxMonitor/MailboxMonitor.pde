@@ -7,9 +7,9 @@
  that mail is present and needs to be retrieved.
 
  circuit:
- * IR receiver emitter on analog pin 3 for reading data
- * IR receiver emitter on digital pin 8, with 100K ohm resistor
- * IR transmitter anode on digital pin 9, with 100 ohm resistor
+ * IR receiver emitter (short lead for 276-0142) on analog pin 3 for reading data
+ * IR receiver emitter (short lead 276-0142) on digital pin 8, with 100K ohm resistor
+ * IR transmitter anode (long lead 276-0142) on digital pin 9, with 100 ohm resistor
  * XBee DOUT on digital pin 0 (RX)
  * XBee DIN on digital pin 1 (TX)
 
