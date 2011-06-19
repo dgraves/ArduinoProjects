@@ -24,6 +24,8 @@ final int BAUD_RATE = 19200;
 final int SERVER_PORT = 8049;
 
 final int FONT_SIZE = 12;
+final int PAD_X = 10;
+final int PAD_Y = 10;
 
 // Samples for smoothing acceleration with NunchukStateBuffer
 final int MAX_SAMPLES = 16;
@@ -106,41 +108,41 @@ void draw() {
   int count = 1;
 
   // Server data
-  text("HTTP Server Status", 10, 10 + (FONT_SIZE * count++));
-  text("  URL: http://localhost:" + SERVER_PORT, 10, 10 + (FONT_SIZE * count++));
-  text("  WWW Root: " + webRoot, 10, 10 + (FONT_SIZE * count++));
-  text("  Last Activity: " + lastPage, 10, 10 + (FONT_SIZE * count++));
+  text("HTTP Server Status", PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  URL: http://localhost:" + SERVER_PORT, PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  WWW Root: " + webRoot, PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Last Activity: " + lastPage, PAD_X, PAD_Y + (FONT_SIZE * count++));
     
   // Raw state data
   count++;
-  text("Nunchuk Raw Data", 10, 10 + (FONT_SIZE * count++));
-  text("  Joystick X: " + nunchukState.joystickX(), 10, 10 + (FONT_SIZE * count++));
-  text("  Joystick Y: " + nunchukState.joystickY(), 10, 10 + (FONT_SIZE * count++));
-  text("  Acceleration X: " + nunchukState.accelerationX(), 10, 10 + (FONT_SIZE * count++));
-  text("  Acceleration Y: " + nunchukState.accelerationY(), 10, 10 + (FONT_SIZE * count++));
-  text("  Acceleration Z: " + nunchukState.accelerationZ(), 10, 10 + (FONT_SIZE * count++));
-  text("  Button C: " + (nunchukState.isButtonCDown() ? "Down" : "Up"), 10, 10 + (FONT_SIZE * count++));
-  text("  Button Z: " + (nunchukState.isButtonZDown() ? "Down" : "Up"), 10, 10 + (FONT_SIZE * count++));
+  text("Nunchuk Raw Data", PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Joystick X: " + nunchukState.joystickX(), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Joystick Y: " + nunchukState.joystickY(), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Acceleration X: " + nunchukState.accelerationX(), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Acceleration Y: " + nunchukState.accelerationY(), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Acceleration Z: " + nunchukState.accelerationZ(), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Button C: " + (nunchukState.isButtonCDown() ? "Down" : "Up"), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Button Z: " + (nunchukState.isButtonZDown() ? "Down" : "Up"), PAD_X, PAD_Y + (FONT_SIZE * count++));
  
   // Processed state data
   count++;
-  text("Nunchuk Processed Data", 10, 10 + (FONT_SIZE * count++));
-  text("  Pan X: " + nunchukStateProcessor.joystickX(), 10, 10 + (FONT_SIZE * count++));
-  text("  Pan Y: " + nunchukStateProcessor.joystickY(), 10, 10 + (FONT_SIZE * count++));
-  text("  Rotation: " + nunchukStateProcessor.accelerationX(), 10, 10 + (FONT_SIZE * count++));
-  text("  Tilt: " + nunchukStateProcessor.accelerationY(), 10, 10 + (FONT_SIZE * count++));
-  text("  Reset: " + nunchukStateProcessor.accelerationZ(), 10, 10 + (FONT_SIZE * count++));
-  text("  Zoom In: " + (nunchukStateProcessor.isButtonCDown() ? "Down" : "Up"), 10, 10 + (FONT_SIZE * count++));
-  text("  Zoom Out: " + (nunchukStateProcessor.isButtonZDown() ? "Down" : "Up"), 10, 10 + (FONT_SIZE * count++));
+  text("Nunchuk Processed Data", PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Pan X: " + nunchukStateProcessor.joystickX(), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Pan Y: " + nunchukStateProcessor.joystickY(), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Rotation: " + nunchukStateProcessor.accelerationX(), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Tilt: " + nunchukStateProcessor.accelerationY(), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Reset: " + nunchukStateProcessor.accelerationZ(), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Zoom In: " + (nunchukStateProcessor.isButtonCDown() ? "Down" : "Up"), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Zoom Out: " + (nunchukStateProcessor.isButtonZDown() ? "Down" : "Up"), PAD_X, PAD_Y + (FONT_SIZE * count++));
 
   // Calibration data values
   count++;
-  text("Calibration Values", 10, 10 + (FONT_SIZE * count++));
-  text("  Joystick X: " + nunchukStateProcessor.calibratedJoystickX(), 10, 10 + (FONT_SIZE * count++));
-  text("  Joystick Y: " + nunchukStateProcessor.calibratedJoystickY(), 10, 10 + (FONT_SIZE * count++));
-  text("  Acceleration X: " + nunchukStateProcessor.calibratedAccelerationX(), 10, 10 + (FONT_SIZE * count++));
-  text("  Acceleration Y: " + nunchukStateProcessor.calibratedAccelerationY(), 10, 10 + (FONT_SIZE * count++));
-  text("  Acceleration Z: " + nunchukStateProcessor.calibratedAccelerationZ(), 10, 10 + (FONT_SIZE * count++));
+  text("Calibration Values", PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Joystick X: " + nunchukStateProcessor.calibratedJoystickX(), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Joystick Y: " + nunchukStateProcessor.calibratedJoystickY(), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Acceleration X: " + nunchukStateProcessor.calibratedAccelerationX(), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Acceleration Y: " + nunchukStateProcessor.calibratedAccelerationY(), PAD_X, PAD_Y + (FONT_SIZE * count++));
+  text("  Acceleration Z: " + nunchukStateProcessor.calibratedAccelerationZ(), PAD_X, PAD_Y + (FONT_SIZE * count++));
 }
 
 void setupHttpServer() {
