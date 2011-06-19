@@ -89,8 +89,9 @@ void setup() {
   arduinoPort = new Serial(this, Serial.list()[0], BAUD_RATE);
   arduinoPort.bufferUntil(LINE_FEED);
 
-  println("\n\n\nWelcome to the Arduino ringtone visualizer!");
+  println("\n\n\nWelcome to the ringtone visualizer!");
   println("Press the spacebar to send a custom ringtone to the Arduino.");
+  println("Press the enter key to toggle video recording.");
 }
 
 void serialEvent(Serial port) {
