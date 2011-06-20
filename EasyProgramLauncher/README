@@ -1,0 +1,38 @@
+Project Description - Easy Program Launcher
+===========================================
+The Easy Program Launcher project for Teensy.
+  
+Easy Program Launcher emulates a keyboard to send key commands to a pesonal computer that cause an application to be launched.  Designed to be embedded within an Easy Button from Staples, the key commands are sent when the Easy Button is pressed.
+
+A switch hidden in the battery compartment of the Easy Button selects between Windows and Linux operating system modes.  When Windows mode is enabled, 'WinKey+R' is sent, followed by the name of a batch file to be executed, 'easylauncher.bat'.  When Linux mode is selected, 'Alt+F2' is sent, followed by a command to launch a script, 'sh easylauncher.sh'.
+
+The files 'easylauncher.bat' and 'easylauncher.sh' can contain any set of commands for launching an application.  They must be in your path to work correctly.
+
+EasyProgramLauncher is a program for the Teensy USB Development Board.  A Teensy USB board, the Teensy USB loader application and Teensyduino add-on for the Arduino IDE are required to use this program.
+
+EasyProgramLauncher is based on the AWESOME Button, created by Matt Richardson:
+  http://blog.makezine.com/archive/2011/04/the-awesome-button.html
+
+
+Software Installation
+=====================
+The Easy Program Launcher project contains a project for the Arduino IDE (http://arduino.cc/en/Main/Software).  The Teensyduino software add-on for the Arduino IDE and the Teensy Loader application are required to program the Teensy with the Arduino IDE.  The project can be compiled and installed with the Arduino IDE and associated Teensy software. 
+
+
+Hardware Setup
+==============
+The necessary parts are:
+  1. One Teensy USB Development Board
+  2. One Staples Easy Button (can be substituted with any push button)
+  3. One slide switch
+  4. One mini USB cable
+
+  
+License
+=======
+The source code for the Easy Program Launcher project has been made available with the MIT License.  See the file named COPYING for details.  
+
+
+Dependencies
+============
+Keyboard library for Teensy

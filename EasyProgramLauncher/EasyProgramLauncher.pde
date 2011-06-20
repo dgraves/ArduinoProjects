@@ -1,11 +1,14 @@
 /*
  Easy Program Launcher for Teensy USB
   
- Emulates a keyboard that sends a command to a pesonal
- computer to launch an application when a button is
- pressed (preferrably a hacked Easy Button from Staples).
- A switch selects between Windows and Linux operating
- system mode.  When Windows mode is enabled, 'Ctrl+R' is
+ Emulates a keyboard to send key commands to a pesonal
+ computer that cause an application to be launched.  Designed
+ to be embedded within an Easy Button from Staples, the key
+ commands are sent when the Easy Button is pressed.
+
+ A switch hidden in the battery compartment of the Easy
+ Button selects between Windows and Linux operating
+ system modes.  When Windows mode is enabled, 'WinKey+R' is
  sent, followed by the name of a batch file to be executed,
  'easylauncher.bat'.  When Linux mode is selected, 'Alt+F2'
  is sent, followed by a command to launch a script, 
@@ -20,10 +23,8 @@
  USB loader application and Teensyduino add-on for the
  Arduino IDE are required to use this program.
  
- EasyProgramLauncher was designed to be use with a
- modified Easy Button from Staples and is a slightly
- modified version of the Awesome Button, created by
- Matt Richardson:
+ EasyProgramLauncher is based on the AWESOME Button,
+ created by Matt Richardson:
    http://blog.makezine.com/archive/2011/04/the-awesome-button.html
  
  circuit:
