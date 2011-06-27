@@ -1,5 +1,5 @@
 /*
- Eye of the Beholder - Security Access Control
+ Eye of the Beholder - Security ID Reader
 
  created 25 Jun 2011
  by Dustin Graves
